@@ -311,8 +311,8 @@ void* imu_serial_main(void* arg)
 static int32_t imu_serial_checksum(char* aBuf)
 {
     int32_t tRet = DEF_IMU_FALSE;
-    int16_t tBCC = 0;
-    int16_t tSum = 0;
+    int16_t tBCC = 0;   /* BCC */
+    int16_t tSum = 0;   /* ID及びデータ列のバイト毎の排他的論理和 */
 
     if (('0' <= aBuf[23]) && (aBuf[23] <= '9'))
 	{
@@ -341,7 +341,7 @@ static int32_t imu_serial_checksum(char* aBuf)
 
 	for (int cnt = 1; cnt < 23; cnt++)
 	{
-		tSum ^= aBuf[cnt];
+		tSum ^= aBuf[cnt];  /* 1バイト目から22バイト目のデータの排他的論理和 */
 	}
 
     if(tBCC == tSum)
@@ -351,5 +351,4 @@ static int32_t imu_serial_checksum(char* aBuf)
 
     return tRet;
 }
-
 
